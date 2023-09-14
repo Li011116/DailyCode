@@ -1,0 +1,147 @@
+<!--浏览类别-->
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>企业销售分析系统</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/materialdesignicons.min.css" rel="stylesheet">
+<!--标签插件-->
+<link rel="stylesheet" href="js/jquery-tags-input/jquery.tagsinput.min.css">
+<link href="css/style.min.css" rel="stylesheet">
+
+	<!--对话框-->
+	<link rel="stylesheet" href="js/jconfirm/jquery-confirm.min.css">
+</head>
+  
+<body>
+<div class="container-fluid p-t-15">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="card">
+				<div class="card-toolbar clearfix">
+					<form class="pull-right search-bar" method="get" action="#!" role="form">
+						<div class="input-group">
+							<div class="input-group-btn">
+								<input type="hidden" name="search_field" id="search-field" value="title">
+								<button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+									标题 <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+									<li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
+								</ul>
+							</div>
+							<input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
+						</div>
+					</form>
+					<div class="toolbar-btn-action">
+						<a class="btn btn-primary m-r-5" href="#!"><i class="mdi mdi-plus"></i> 新增</a>
+						<a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
+						<a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
+						<a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+					</div>
+				</div>
+				<div class="card-body">
+
+					<div class="table-responsive">
+
+						<table class="table table-bordered">
+							<thead>
+							<tr>
+								<th>类别名称</th>
+								<th>描述</th>
+								<th>操作</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td>家电</td>
+								<td>家用电器类别</td>
+								<td>
+									<div class="btn-group">
+										<a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+										<a style="visibility: hidden;" class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+										<a class="btn btn-xs btn-default" href="#!" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+
+						<ul class="pagination" id="pagination">
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<!--标签插件-->
+<script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
+<script type="text/javascript" src="js/main.min.js"></script>
+
+	<!--对话框-->
+	<script src="js/jconfirm/jquery-confirm.min.js"></script>
+
+<!--引入分页展示js-->
+<script src="./js/pagination-comm.js"></script>
+
+<script type="text/javascript">
+	var pageVO = null;
+$(function () {
+	//请求分页信息
+	loadPageInfo("./productTypes/queryByPage")
+});
+
+	function showTableInfo(){
+		//清空之前的数据
+		$("tbody").empty();
+
+		//遍历当前页的数据
+		for(let item of pageVO.content){
+			//拼接表格行
+			let row = `<tr>
+								<td>${item.typeName}</td>
+								<td>${item.typeDesc}</td>
+								<td>
+									<div class="btn-group">
+										<a class="btn btn-xs btn-default" href="javascript:jumpModPage(${item.typeId},'${item.typeName}','${item.typeDesc}')" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+										<a style="visibility: hidden;" class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+										<a class="btn btn-xs btn-default" href="javascript:delById('./productTypes/deleteById/',${item.typeId},'${item.typeName}')" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+									</div>
+								</td>
+							</tr>
+                       `;
+			//添加到表格中
+			$("tbody").append(row);
+		}
+	}
+
+	/*
+	* 跳转修改页面
+	* */
+	function jumpModPage(typeId,typeName,typeDesc){
+		//1.获取修改信息
+		//2.拼接要修改的信息为一个js对象
+		let modType = {
+			"typeId": typeId,
+			"typeName": typeName,
+			"typeDesc": typeDesc
+		}
+
+		//3.转换修改的js对象为JSON放入 sessionStorage
+		sessionStorage.setItem("modType",JSON.stringify(modType));
+
+		//4.跳转页面
+		location.href = "ca_mod.html"
+	}
+
+</script>
+</body>
+</html>
